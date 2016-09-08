@@ -11,3 +11,10 @@ version.h
 *.orig
 *.bak
 PINS_*/
+
+*.o
+*.so
+*.so.*
+examples_RPi/helloworld_rx
+examples_RPi/helloworld_tx
+examples_RPi/rx-test

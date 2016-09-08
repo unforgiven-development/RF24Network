@@ -13,21 +13,12 @@
 #
 prefix := /usr/local
 
-ARCH=armv6zk
+# Assuming Raspberry Pi (original) / Raspberry Pi Zero
+CCFLAGS=-O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -std=c++0x
+# -- Check for Raspberry Pi 2+ --
 ifeq "$(shell uname -m)" "armv7l"
-ARCH=armv7-a
-endif
-
-# Detect the Raspberry Pi from cpuinfo
-#Count the matches for BCM2708 or BCM2709 in cpuinfo
-RPI=$(shell cat /proc/cpuinfo | grep Hardware | grep -c BCM2708)
-ifneq "${RPI}" "1"
-RPI=$(shell cat /proc/cpuinfo | grep Hardware | grep -c BCM2709)
-endif
-
-ifeq "$(RPI)" "1"
-# The recommended compiler flags for the Raspberry Pi
-CCFLAGS=-Ofast -mfpu=vfp -mfloat-abi=hard -march=$(ARCH) -mtune=arm1176jzf-s -std=c++0x
+# Set $CCFLAGS for Raspberry Pi 2+
+CCFLAGS=-march=armv7-a -mtune=cortex-a7 -mfpu=neon-vfpv4 -mfloat-abi=hard -O2 -pthread -pipe -fstack-protector --param=ssp-buffer-size=4 -std=c++0x
 endif
 
 
