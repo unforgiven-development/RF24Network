@@ -12,10 +12,13 @@
 # You can change the install directory by editing the LIBDIR line
 #
 
-DEBUG_MAKEFILE=1
+
+REL_RF24_MAKEFILE_INC="../RF24/Makefile.inc"
+RF24_MAKEFILE_INC=$(shell echo "$$(cd "$$(dirname "$(REL_RF24_MAKEFILE_INC)")"; pwd)/$$(basename "$(REL_RF24_MAKEFILE_INC)")")
+
 
 # Check to see if ../RF24/Makefile.inc exists (ie: all of the RF24xxx projects were cloned in a common folder)
-RF24_MAKEFILE_INC="../RF24/Makefile.inc"
+#RF24_MAKEFILE_INC="../RF24/Makefile.inc"
 
 ifneq ("$(wildcard $(RF24_MAKEFILE_INC))","")
 RF24_MAKEFILE_INC_EXISTS=1
