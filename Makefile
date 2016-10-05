@@ -12,6 +12,8 @@
 # You can change the install directory by editing the LIBDIR line
 #
 
+DEBUG_MAKEFILE=1
+
 # Check to see if ../RF24/Makefile.inc exists (ie: all of the RF24xxx projects were cloned in a common folder)
 RF24_MAKEFILE_INC="../RF24/Makefile.inc"
 
@@ -21,7 +23,7 @@ else
 RF24_MAKEFILE_INC_EXISTS=0
 endif
 
-ifeq $(RF24_MAKEFILE_INC_EXISTS) 1
+ifeq ($(RF24_MAKEFILE_INC_EXISTS),1)
 # $(RF24_MAKEFILE_INC) DEFINES:
 # - CFLAGS
 # - PREFIX
@@ -90,3 +92,6 @@ install-headers:
 	@if ( test ! -d ${HEADER_DIR} ) ; then mkdir -p ${HEADER_DIR} ; fi
 	@install -m 0644 *.h ${HEADER_DIR}
 
+# simple debug function
+print-%:
+	@echo $*=$($*)

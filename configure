@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+#
+# setup some basic stuff for the Makefile
+#
+
+REL_RF24_MAKEFILE_INC="../RF24/Makefile.inc"
+
+if [ -f "${REL_RF24_MAKEFILE_INC}" ]; then
+	echo -e "\n\t** \033[1m../RF24/Makefile.inc\033[0m exists **\n"
+	echo -e "\tAbsolute Path: $(cd "$(dirname "${REL_RF24_MAKEFILE_INC}")"; pwd)/$(basename "${REL_RF24_MAKEFILE_INC}")"
+else
+	echo -e "\n\t** FAIL **\n"
+fi
+
