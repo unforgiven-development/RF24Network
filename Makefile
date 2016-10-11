@@ -16,10 +16,6 @@
 REL_RF24_MAKEFILE_INC="../RF24/Makefile.inc"
 RF24_MAKEFILE_INC=$(shell echo "$$(cd "$$(dirname "$(REL_RF24_MAKEFILE_INC)")"; pwd)/$$(basename "$(REL_RF24_MAKEFILE_INC)")")
 
-
-# Check to see if ../RF24/Makefile.inc exists (ie: all of the RF24xxx projects were cloned in a common folder)
-#RF24_MAKEFILE_INC="../RF24/Makefile.inc"
-
 ifneq ("$(wildcard $(RF24_MAKEFILE_INC))","")
 RF24_MAKEFILE_INC_EXISTS=1
 else
@@ -43,12 +39,12 @@ EXAMPLES_DIR=$(PREFIX)/bin
 CC=gcc
 CXX=g++
 LDCONFIG=ldconfig
-
-# Assuming Raspberry Pi (original) / Raspberry Pi Zero
-CFLAGS=-O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -std=c++0x
-# -- Check for Raspberry Pi 2+ --
+# CFLAGS #
+## Assuming Raspberry Pi (original) / Raspberry Pi Zero ##
+CFLAGS=-march=armv6zk -mtune=arm1176jzf-s -mfpu=vfp -mfloat-abi=hard -O2 -pthread -pipe -fstack-protector --param=ssp-buffer-size=4 -std=c++0x
+## -- Check for Raspberry Pi 2+ -- ##
 ifeq "$(shell uname -m)" "armv7l"
-# Set $CFLAGS for Raspberry Pi 2+
+## Set CFLAGS for Raspberry Pi 2+ ##
 CFLAGS=-march=armv7-a -mtune=cortex-a7 -mfpu=neon-vfpv4 -mfloat-abi=hard -O2 -pthread -pipe -fstack-protector --param=ssp-buffer-size=4 -std=c++0x
 endif
 
@@ -82,7 +78,7 @@ install: install-libs install-headers
 
 # Install the library to LIB_DIR
 
-install-libs: 
+install-libs:
 	@echo "[Install]"
 	@if ( test ! -d $(PREFIX)/lib ) ; then mkdir -p $(PREFIX)/lib ; fi
 	@install -m 0755 ${LIBNAME_RFN} ${LIB_DIR}
@@ -98,3 +94,5 @@ install-headers:
 # simple debug function
 print-%:
 	@echo $*=$($*)
+
+.PHONY: install
