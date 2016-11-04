@@ -1,13 +1,18 @@
 /*
- Copyright (C) 2011 James Coliz, Jr. <maniacbug@ymail.com>
-
- This program is free software; you can redistribute it and/or
- modify it under the terms of the GNU General Public License
- version 2 as published by the Free Software Foundation.
+ * RF24Network - RF24Network.cpp
+ *
+ * Copyright (C) 2016 Gerad Munsch <gmunsch@unforgivendevelopment.com>
+ * Copyright (C) 2016 TMRh20
+ * Copyright (C) 2011 James Coliz, Jr. <maniacbug@ymail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * version 2 as published by the Free Software Foundation.
  */
+ 
 #include "RF24Network_config.h"
 
- #if defined (RF24_LINUX)
+#if defined (RF24_LINUX)
   #include <stdlib.h>
   #include <stdio.h>
   #include <errno.h>

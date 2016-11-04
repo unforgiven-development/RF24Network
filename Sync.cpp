@@ -1,9 +1,13 @@
 /*
- Copyright (C) 2011 J. Coliz <maniacbug@ymail.com>
-
- This program is free software; you can redistribute it and/or
- modify it under the terms of the GNU General Public License
- version 2 as published by the Free Software Foundation.
+ * RF24Network - Sync.cpp
+ *
+ * Copyright (C) 2016 Gerad Munsch <gmunsch@unforgivendevelopment.com>
+ * Copyright (C) 2016 TMRh20
+ * Copyright (C) 2011 James Coliz, Jr. <maniacbug@ymail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * version 2 as published by the Free Software Foundation.
  */
 
 // STL headers
@@ -16,10 +20,9 @@
 // This component's header
 #include <Sync.h>
 
-/****************************************************************************/
+/******************************************************************************/
 
-void Sync::update(void)
-{
+void Sync::update (void) {
   // Pump the network
   network.update();
 
@@ -27,26 +30,25 @@ void Sync::update(void)
   uint8_t message[32];
   uint8_t *mptr = message;
   unsigned at = 0;
-  while ( at < len )
-  {
-    if ( app_data && internal_data && app_data[at] != internal_data[at] )
-    {
+  while (at < len) {
+    if (app_data && internal_data && app_data[at] != internal_data[at]) {
       // Compose a message with the deltas
       *mptr++ = at + 1;
       *mptr++ = app_data[at];
-
+      
       // Update our internal view
       internal_data[at] = app_data[at];
     }
     ++at;
   }
+
   // Zero out the remainder
-  while ( at++ < sizeof(message) )
+  while (at++ < sizeof(message)) {
     *mptr++ = 0;
+  }
 
   // If changes, send a message
-  if ( *message )
-  {
+  if (*message) {
     // TODO handle the case where this has to be broken into
     // multiple messages
     RF24NetworkHeader header(/*to node*/ to_node, /*type*/ 'S' /*Sync*/);

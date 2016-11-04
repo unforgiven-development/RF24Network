@@ -1,6 +1,10 @@
 /*
- * rx-test.cpp
+ * RF24Network -- examples_RPi/rx-test.cpp
  *
+ * (c) 2016 Gerad Munsch <gmunsch@unforgivendevelopment.com>
+ * (c) ????
+ *
+ * An example of receiving data with RF24Network
  */
 
 /* === INCLUDES === */
@@ -17,6 +21,8 @@
  */
 
 //using namespace std;
+
+/* -------------------------------- SPI Init -------------------------------- */
 
 // CE Pin, CSN Pin, SPI Speed
 
@@ -39,55 +45,60 @@ const uint16_t other_node = 01;
 
 // Structure of our payload
 struct payload_power_t {
-	unsigned long nodeId;
-	float power;
-	float current;
+  unsigned long nodeId;
+  float power;
+  float current;
 };
 
 struct payload_weather_t {
-	unsigned long nodeId;
-	float temperature;
-	float humidity;
-	unsigned long lux;
+  unsigned long nodeId;
+  float temperature;
+  float humidity;
+  unsigned long lux;
 };
 
-int main(int argc, char** argv) {
-	// Refer to RF24.h or nRF24L01 DS for settings
+int main (int argc, char** argv) {
+	/*
+	 * For further information, refer to "RF24.h" header file, which is contained
+	 * in the primary "RF24" project repository, or the official datasheet and/or
+	 * related documentation for the NRF24L01(+) from Nordic Semiconductor.
+	 */
 
-	//char filenameTemp[] = "/root/weather/weather_sensor.rrd";
-	//char filenameCurrent[] = "/home/pi/temperature.txt";
-	//char command[] = "update";
-	//char values[100];
+  //char filenameTemp[] = "/root/weather/weather_sensor.rrd";
+  //char filenameCurrent[] = "/home/pi/temperature.txt";
+  //char command[] = "update";
+  //char values[100];
 
-	char temperatureFile[] = "temperature.txt";
+  char temperatureFile[] = "temperature.txt";
 
-	radio.begin();
-	//radio.setDataRate(RF24_250KBPS);
-	radio.setRetries(7, 7);
+  radio.begin();
+  //radio.setDataRate(RF24_250KBPS);
+  radio.setRetries(7, 7);
 
-	delay(5);
-	//network.begin(RF24_CHANNEL, RF24_ADDRESS);
-	network.begin(100, this_node);
-	radio.printDetails();
+  delay(5);
+  //network.begin(RF24_CHANNEL, RF24_ADDRESS);
+  network.begin(100, this_node);
+  radio.printDetails();
 
-	while(1) {
-		//FILE * pFile;
-		//pFile = fopen ("/root/temp-exterior.txt","a");
-		network.update();
-		while( network.available() ) {
-			// If so, grab it and print it out
-			RF24NetworkHeader header;
-			network.peek(header);
+	while (1) {
+    //FILE * pFile;
+    //pFile = fopen ("/root/temp-exterior.txt","a");
+    network.update();
+    /* Check if we have any data waiting for us */
+    while (network.available()) {
+      /* If so, retrieve the data, and print it out */
+      RF24NetworkHeader header;
+      network.peek(header);
 
-			if(header.type == 'T') {
-				float message;
-				network.read(header, &message, sizeof(float));
-				printf("RCVD: %.3f \n\r", message);
+      if (header.type == 'T') {
+        float message;
+        network.read(header, &message, sizeof(float));
+        printf("RCVD: %.3f \n\r", message);
 				FILE *myFile;
 				myFile = fopen(temperatureFile, "a+"); //Append, new EOF
 
-				if(!myFile) {
-					printf("File not opened\n\r");
+				if (!myFile) {
+          printf("File not opened\n\r");
 				} else {
 					//fwrite(msg, sizeof(float), 1, myFile);
 					fprintf(myFile, "%.3f\n\r", message);
@@ -96,7 +107,7 @@ int main(int argc, char** argv) {
 					fclose(myFile);
 				}
 			}
-/***********************************************************************************************************************
+/*******************************************************************************
 			// sensor de temperatura y humedad
 			if (header.from_node == 1) {
 				payload_weather_t payload;
@@ -131,7 +142,7 @@ int main(int argc, char** argv) {
 			tm_info = localtime(&timer);
 			strftime(timeBuffer, 25, "%Y/%m/%d %H:%M:%S", tm_info);
 			fprintf(pFile, "%s;%lu;%.2f;%.2f\n", timeBuffer, payload.nodeId, payload.data1, payload.data2);
-***********************************************************************************************************************/
+*******************************************************************************/
 		}
 		delay(2000);
 		//fclose(pFile);

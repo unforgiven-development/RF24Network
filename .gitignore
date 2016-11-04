@@ -1,20 +1,35 @@
-16000000/
-8000000/
-out/
-docs/
-.*.swp
-.*.swo
-Session.vim
-*.swp
-*.swo
-version.h
+# RF24Network - .gitignore
+#
+# - Revised 2016-11-04: Gerad Munsch <gmunsch@unforgivendevelopment.com>
+#
+
+## Backup files & Patch artifacts ##
+*~
 *.orig
 *.bak
-PINS_*/
 
+## Object and Shared Object files ##
 *.o
 *.so
 *.so.*
+
+## Output Directories ##
+out/
+docs/
+
+## ./examples_RPi/ ##
 examples_RPi/helloworld_rx
 examples_RPi/helloworld_tx
 examples_RPi/rx-test
+examples_RPi/temperatures.
+
+## Misc ##
+16000000/
+8000000/
+PINS_
+Session.vim
+.*.swo
+*.swo
+.*.swp
+*.swp
+version.h
