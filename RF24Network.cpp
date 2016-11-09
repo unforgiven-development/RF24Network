@@ -1,5 +1,5 @@
 /*
- * RF24Network - RF24Network.cpp
+ * RF24Network -- RF24Network.cpp
  *
  * Copyright (C) 2016 Gerad Munsch <gmunsch@unforgivendevelopment.com>
  * Copyright (C) 2016 TMRh20
@@ -353,7 +353,7 @@ uint8_t RF24Network::enqueue(RF24NetworkHeader* header) {
   return result;
 }
 
-/******************************************************************/
+/******************************************************************************/
 
 bool RF24Network::appendFragmentToFrame(RF24NetworkFrame frame) {
 
