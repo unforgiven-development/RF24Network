@@ -1,11 +1,11 @@
 {
   "name": "RF24Network",
   "keywords": "rf, radio, wireless, spi",
-  "description": "Optimized Network Layer for nRF24L01(+) Radios",
+  "description": "Optimized Network Layer for inexpensive 2.4 GHz NRF24L01(+) radio transceiver modules",
   "repository":
   {
     "type": "git",
-    "url": "https://github.com/TMRh20/RF24Network.git"
+    "url": "https://github.com/unforgiven-development/RF24Network.git"
   },
   "dependencies":
   {
