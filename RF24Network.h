@@ -1104,7 +1104,7 @@ public:
  ** @page Tuning Performance and Data Loss: Tuning the Network
  * Tips and examples for tuning the network and general operation.
  *
- *  <img src="tmrh20/topologyImage.jpg" alt="Topology" height="75%" width="75%">
+ *  <img src="res/topologyImage.jpg" alt="Topology" height="75%" width="75%">
  *
  * @section General Understanding Radio Communication and Topology
  * When a transmission takes place from one radio module to another, the receiving radio will communicate
