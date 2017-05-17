@@ -35,6 +35,9 @@
   #include <utility>      // std::pair
   #include <queue>
   
+//ATXMega
+#elif defined(XMEGA_D3)
+  #include "../../rf24lib/rf24lib/RF24.h"
 #endif
 
 
@@ -626,7 +629,7 @@ public:
    * @param interruptPin: The interrupt number to use (0,1) for pins two and three on Uno,Nano. More available on Mega etc.
    * @return True if sleepNode completed normally, after the specified number of cycles. False if sleep was interrupted
    */
- bool sleepNode( unsigned int cycles, int interruptPin );
+ bool sleepNode( unsigned int cycles, int interruptPin, uint8_t INTERRUPT_MODE=0); //added interrupt mode support (default 0=LOW)
 
 
   /**

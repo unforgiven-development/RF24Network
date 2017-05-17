@@ -19,7 +19,11 @@
 #include <string.h>
 // Framework headers
 // Library headers
-#include <RF24Network_config.h>
+#if defined(XMEGA_D3)
+	#include "RF24Network_config.h"
+#else
+	#include <RF24Network_config.h>
+#endif
 // Project headers
 
 /******************************************************************************/

@@ -31,7 +31,12 @@
   #include "RF24Network.h"
 #endif
 
-#if defined (ENABLE_SLEEP_MODE) && !defined (RF24_LINUX) && !defined (__ARDUINO_X86__)
+#if defined(ENABLE_SLEEP_MODE) && defined(ESP8266)
+        #warning "Disabling sleep mode because sleep doesn't work on ESP8266"
+	#undef ENABLE_SLEEP_MODE
+#endif
+
+#if defined (ENABLE_SLEEP_MODE) && !defined (RF24_LINUX) && !defined (__ARDUINO_X86__) 
 	#include <avr/sleep.h>
 	#include <avr/power.h>
 	volatile byte sleep_cycles_remaining;
@@ -162,7 +167,7 @@ uint8_t RF24Network::update(void)
   
   while ( radio.isValid() && radio.available(&pipe_num) ){
 
-    #if defined (ENABLE_DYNAMIC_PAYLOADS)
+    #if defined (ENABLE_DYNAMIC_PAYLOADS) && !defined (XMEGA_D3)
       if( (frame_size = radio.getDynamicPayloadSize() ) < sizeof(RF24NetworkHeader)){
 	    delay(10);
 		continue;
@@ -1299,15 +1304,18 @@ ISR(WDT_vect){
 }
 
 
-bool RF24Network::sleepNode( unsigned int cycles, int interruptPin ){
-
-
+bool RF24Network::sleepNode( unsigned int cycles, int interruptPin, uint8_t INTERRUPT_MODE){
   sleep_cycles_remaining = cycles;
   set_sleep_mode(SLEEP_MODE_PWR_DOWN); // sleep mode is set here
   sleep_enable();
   if(interruptPin != 255){
     wasInterrupted = false; //Reset Flag
-  	attachInterrupt(interruptPin,wakeUp, LOW);
+	//LOW,CHANGE, FALLING, RISING correspond with the values 0,1,2,3 respectively
+	attachInterrupt(interruptPin,wakeUp, INTERRUPT_MODE);
+  	//if(INTERRUPT_MODE==0) attachInterrupt(interruptPin,wakeUp, LOW);
+	//if(INTERRUPT_MODE==1) attachInterrupt(interruptPin,wakeUp, RISING);
+	//if(INTERRUPT_MODE==2) attachInterrupt(interruptPin,wakeUp, FALLING);
+	//if(INTERRUPT_MODE==3) attachInterrupt(interruptPin,wakeUp, CHANGE);
   }    
 
   #if defined(__AVR_ATtiny25__) || defined(__AVR_ATtiny45__) || defined(__AVR_ATtiny85__)
@@ -1327,7 +1335,6 @@ bool RF24Network::sleepNode( unsigned int cycles, int interruptPin ){
   #else
 	WDTCSR &= ~_BV(WDIE);
   #endif
-  
   return !wasInterrupted;
 }
 
