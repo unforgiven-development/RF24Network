@@ -1,66 +1,67 @@
-/*
- * RF24Network - Sync.h
+/**
+ * \file Sync.h
  *
- * Copyright (C) 2016 Gerad Munsch <gmunsch@unforgivendevelopment.com>
- * Copyright (C) 2016 TMRh20
- * Copyright (C) 2011 James Coliz, Jr. <maniacbug@ymail.com>
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation.
+ * \author		Gerad Munsch <gmunsch@unforgivendevelopment.com>
+ * \author		TMRh20
+ * \author		James Coliz, Jr. <maniacbug@ymail.com>
+ * \date		2011-2017
+ * \copyright	This program is free software; you can redistribute it and/or modify it under the terms of the GNU
+ *				General Public License version 2 as published by the Free Software Foundation.
  */
 
-#ifndef __SYNC_H__
-#define __SYNC_H__
+#ifndef _SYNC_H__
+#define _SYNC_H__
 
 // STL headers
 // C headers
 #include <stdlib.h>
 #include <string.h>
+
 // Framework headers
 // Library headers
 #if defined(XMEGA_D3)
-	#include "RF24Network_config.h"
+#include "RF24Network_config.h"
 #else
-	#include <RF24Network_config.h>
+#include <RF24Network_config.h>
 #endif
 // Project headers
 
-/******************************************************************************/
+/* ------------------------------------------------------------------------------------------------------------------ */
 
 class RF24Network;
 
 /**
- * Synchronizes a shared set of variables between multiple nodes
+ * \class Sync	Synchronizes a shared set of variables between multiple nodes.
  */
-
 class Sync {
-  private:
-    RF24Network& network;
-    uint8_t* app_data;        /**< Application's copy of the data */
-    uint8_t* internal_data;   /**< Our copy of the data */
-    size_t len;               /**< Length of the data in bytes */
-    uint16_t to_node;         /**< The other node we're syncing with */
+private:
+	RF24Network& network;
+	uint8_t* app_data;			/*!< Application's copy of the data */
+	uint8_t* internal_data;		/*!< Our (internal) copy of the data */
+	size_t   len;				/*!< Length of the data in bytes */
+	uint16_t to_node;			/*!< The (other) node that we're syncing with */
 
-  protected:
-  public:
-    /**
-     * Constructor
-     *
-     * @param _network Which network to syncrhonize over
-     */
-    Sync(RF24Network& _network): network(_network), app_data(NULL),
-      internal_data(NULL), len(0), to_node(0) {
-    }
+protected:
 
-    /**
-     * Begin the object
-     *
-     * @param _to_node Which node we are syncing with
-     */
-    void begin(uint16_t _to_node) {
-      to_node = _to_node;
-    }
+public:
+	/**
+	 * Constructor
+	 *
+	 * \param[in]	_network	The RF24Network "network" object which represents the network to synchronize over.
+	 */
+	Sync(RF24Network& _network): network(_network), app_data(NULL), internal_data(NULL), len(0), to_node(0) {
+	}
+
+
+	/**
+	 * \fn begin	Begin the object
+	 *
+	 * \param[in]	_to_node	The node Which we are syncing with.
+	 */
+	void begin(uint16_t _to_node) {
+		to_node = _to_node;
+	}
+
 
     /**
      * Declare the shared data set
@@ -76,7 +77,7 @@ class Sync {
     }
 
     /**
-     * Reset the internal copy of the shared data set 
+     * Reset the internal copy of the shared data set
      */
     void reset(void) {
       memcpy(internal_data,app_data,len);
