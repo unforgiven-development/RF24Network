@@ -49,28 +49,28 @@ void Sync::update(void) {
 	}
 
 	/* Zero out the remainder */
-	while (at++ < sizeof(message)) {
+	while ((at++ < sizeof(message)) {
 		*mptr++ = 0;
 	}
 
 	/* If changes, send a message */
 	if (*message) {
-		/* TODO handle the case where this has to be broken into multiple messages */
-		RF24NetworkHeader header(/*to node*/ to_node, /*type*/ 'S' /*Sync*/);
-		network.write(header,message,sizeof(message));
-  }
+		/**
+		 * \todo Handle the case where this has to be broken into multiple messages
+		 */
+		RF24NetworkHeader header(to_node, 'S');	/* PARAMS: (<to_node>, <type>) -- Use type 'S' for 'Sync'. */
+		network.write(header, message, sizeof(message));
+	}
 
-  // Look for messages from the network
-  // Is there anything ready for us?
-  if ( network.available() )
-  {
-    // If so, take a look at it
-    RF24NetworkHeader header;
-    network.peek(header);
+	// Look for messages from the network
+	// Is there anything ready for us?
+	if (network.available()) {
+		// If so, take a look at it
+		RF24NetworkHeader header;
+		network.peek(header);
 
-    switch (header.type)
-    {
-    case 'S':
+		switch (header.type) {
+			case 'S':
       IF_SERIAL_DEBUG(printf_P(PSTR("%lu: SYN Received sync message\n\r"),millis()));
 
       network.read(header,&message,sizeof(message));

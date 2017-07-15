@@ -54,7 +54,7 @@ public:
 
 
 	/**
-	 * \fn begin	Begin the object
+	 * Begin the object
 	 *
 	 * \param[in]	_to_node	The node Which we are syncing with.
 	 */
@@ -63,30 +63,30 @@ public:
 	}
 
 
-    /**
-     * Declare the shared data set
-     *
-     * @param _data Location of shared data to be syncrhonized
-     */
-    template <class T>
-    void register_me(T& _data) {
-      app_data = reinterpret_cast<uint8_t*>(&_data);
-      len = sizeof(_data);
-      internal_data = reinterpret_cast<uint8_t*>(malloc(len));
-      reset();
-    }
+	/**
+	* Declare the shared data set
+	*
+	* @param _data Location of shared data to be syncrhonized
+	*/
+	template <class T>
+	void register_me(T& _data) {
+		app_data = reinterpret_cast<uint8_t*>(&_data);
+		len = sizeof(_data);
+		internal_data = reinterpret_cast<uint8_t*>(malloc(len));
+		reset();
+	}
 
-    /**
-     * Reset the internal copy of the shared data set
-     */
-    void reset(void) {
-      memcpy(internal_data,app_data,len);
-    }
+	/**
+	* Reset the internal copy of the shared data set
+	*/
+	void reset(void) {
+		memcpy(internal_data,app_data,len);
+	}
 
-    /**
-     * Update the network and the shared data set
-     */
-    void update(void);
+	/**
+	* Update the network and the shared data set
+	*/
+	void update(void);
 };
 
 #endif // __SYNC_H__

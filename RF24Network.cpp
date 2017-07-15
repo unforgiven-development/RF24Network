@@ -1,5 +1,6 @@
 /**
- * \file RF24Network.cpp	This file contains the core functionality of RF24Network.
+ * \file RF24Network.cpp
+ * This file contains the core functionality of RF24Network.
  *
  * \author		Gerad Munsch <gmunsch@unforgivendevelopment.com>
  * \author		TMRh20
@@ -11,8 +12,9 @@
 
 #include "RF24Network_config.h"
 
-/* Includes for Linux builds */
+
 #if defined (RF24_LINUX)
+/* Includes for Linux builds */
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
@@ -26,6 +28,8 @@
 #include <algorithm>
 #include <RF24/RF24.h>
 #include "RF24Network.h"
+
+
 #else
 /* Includes for other architectures */
 #include "RF24.h"
