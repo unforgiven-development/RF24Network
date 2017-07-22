@@ -26,20 +26,28 @@
 */
 //#define DISABLE_FRAGMENTATION
 
-/** System defines */
+/**
+ * \name System defines
+ */
 
-/** The size of the main buffer. This is the user-cache, where incoming data is stored.
-* Data is stored using Frames: Header (8-bytes) + Frame_Size (2-bytes) + Data (?-bytes)
-*
-* @note The MAX_PAYLOAD_SIZE is (MAIN_BUFFER_SIZE - 10), and the result must be divisible by 24.
-*/
+/**
+ * @{
+ */
+
+/**
+ * The size of the main buffer. This is the user-cache, where incoming data is stored. Data is stored using Frames:
+ * Header (8-bytes) + Frame_Size (2-bytes) + Data (?-bytes)
+ *
+ * \note The \c MAX_PAYLOAD_SIZE is (\c MAIN_BUFFER_SIZE - 10), and the result \b must be divisible by 24.
+ */
 #define MAIN_BUFFER_SIZE 144 + 10
 
-/** Maximum size of fragmented network frames and fragmentation cache. This MUST BE divisible by 24.
-* @note: Must be a multiple of 24.
-* @note: If used with RF24Ethernet, this value is used to set the buffer sizes.
-*/
-#define MAX_PAYLOAD_SIZE  MAIN_BUFFER_SIZE-10
+/**
+ * Maximum size of fragmented network frames and fragmentation cache. This MUST BE divisible by 24.
+ * \note Must be a multiple of 24.
+ * \note If used with RF24Ethernet, this value is used to set the buffer sizes.
+ */
+#define MAX_PAYLOAD_SIZE MAIN_BUFFER_SIZE - 10
 
 /** Disable user payloads. Saves memory when used with RF24Ethernet or software that uses external data.*/
 //#define DISABLE_USER_PAYLOADS
@@ -58,6 +66,11 @@
 //#define SERIAL_DEBUG_ROUTING
 //#define SERIAL_DEBUG_FRAGMENTATION
 //#define SERIAL_DEBUG_FRAGMENTATION_L2
+
+/**
+ * @}
+ */
+
 /* ------------------------------------------------------------------------------------------------------------------ */
 
 #else // Different set of defaults for ATTiny - fragmentation is disabled and user payloads are set to 3 max
