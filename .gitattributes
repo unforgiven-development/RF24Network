@@ -1,0 +1,116 @@
+#
+# .gitattributes
+#
+# Provides finer-grained control over the attributes of the files committed into
+# the project's git repository.
+#
+
+## Attempt to detect text files, and let git handle EOL normalization ##
+*								text=auto
+
+
+## Force UNIX-style line endings for (most) source files ##
+*.c								text eol=lf diff=cpp
+*.h								text eol=lf diff=cpp
+*.cpp							text eol=lf diff=cpp
+*.hpp							text eol=lf diff=cpp
+*.ino							text eol=lf diff=cpp
+*.pde							text eol=lf diff=cpp
+*.sh							text eol=lf
+*.subr							text eol=lf
+*.csh							text eol=lf
+*.fish							text eol=lf
+Doxyfile						text eol=lf
+Makefile						text eol=lf
+configure						text eol=lf
+*.java							text eol=lf diff=java
+*.jsp							text eol=lf
+*.jspf							text eol=lf
+*.jspx							text eol=lf
+*.py							text eol=lf
+
+
+## Set attributes for Visual Studio projects, and source files ##
+*.cs							text eol=crlf diff=csharp
+*.vb							text eol=crlf
+*.sln							text eol=crlf merge=union
+*.csproj						text eol=crlf merge=union
+*.vbproj						text eol=crlf merge=union
+*.fsproj						text eol=crlf merge=union
+*.dbproj						text eol=crlf merge=union
+*.sqlproj						text eol=crlf merge=union
+*.cshtml						text eol=crlf
+*.resx							text eol=crlf
+*.asax							text eol=crlf
+*.xaml							text eol=crlf
+*.vspscc						text eol=crlf
+*.pubxml						text eol=crlf
+*.svc							text eol=crlf
+*.svcinfo						text eol=crlf
+*.svcmap						text eol=crlf
+*.disco							text eol=crlf
+*.wsdl							text eol=crlf
+*.datasource					text eol=crlf
+*.ClientConfig					text eol=crlf
+*.csproj.user					text eol=crlf
+*.vbproj.user					text eol=crlf
+*.fsproj.user					text eol=crlf
+*.dbproj.user					text eol=crlf
+*.sqlproj.user					text eol=crlf
+packages.config					text eol=crlf
+Package.appxmanifest			text eol=crlf
+App.config						text eol=crlf
+App.Release.config				text eol=crlf
+App.Debug.config				text eol=crlf
+Web.config						text eol=crlf
+Web.Release.config				text eol=crlf
+Web.Debug.config				text eol=crlf
+ApplicationInsights.config		text eol=crlf
+Settings.settings				text eol=crlf
+*.dbmdl							binary
+*.nupkg							binary
+*.suo							binary
+
+
+## Force Windows-style line endings for plain-text files ##
+*.txt							text eol=crlf
+*.properties					text eol=crlf
+*.adoc							text eol=crlf
+*.md							text eol=crlf
+*.log							text eol=crlf
+*.csv							text eol=crlf
+*.ini							text eol=crlf
+*.inf							text eol=crlf
+
+
+## Let git decide on EOL normalization ##
+*.xml							text
+*.xsd							text
+*.xslt							text
+*.htm							text
+*.html							text
+*.css							text
+*.js							text
+*.json							text
+*.svg							text
+*.sql							text
+.gitignore						text
+.gitattributes					text
+AUTHORS							text
+
+
+## Explicitly set some file types as binary ##
+*.ico							binary
+*.png							binary
+*.jpg							binary
+*.jpeg							binary
+*.gif							binary
+*.pdf							binary
+*.docx							binary
+*.xlsx							binary
+*.pptx							binary
+*.zip							binary
+*.pfx							binary
+*.class							binary
+*.jar							binary
+*.war							binary

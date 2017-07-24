@@ -1,76 +1,76 @@
-/*
- Copyright (C) 2011 J. Coliz <maniacbug@ymail.com>
-
- This program is free software; you can redistribute it and/or
- modify it under the terms of the GNU General Public License
- version 2 as published by the Free Software Foundation.
+/**
+ * \file Sync.cpp
+ *
+ * \author		Gerad Munsch <gmunsch@unforgivendevelopment.com>
+ * \author		TMRh20
+ * \author		James Coliz, Jr. <maniacbug@ymail.com>
+ * \date		2011-2017
+ * \copyright	This program is free software; you can redistribute it and/or modify it under the terms of the GNU
+ *				General Public License version 2 as published by the Free Software Foundation.
  */
 
-// STL headers
-// C headers
+/* STL headers / C headers */
 #include <stdlib.h>
 
-#if defined(__AVR_ATxmega64D3__) || defined(__AVR_ATxmega128D3__) || defined(__AVR_ATxmega192D3__) || defined(__AVR_ATxmega256D3__) || defined(__AVR_ATxmega384D3__) /* Could not find the previous definition so it is redefined here */
-	#define XMEGA
-	#define XMEGA_D3
-	#include "RF24Network.h"
-	#include "Sync.h"
+
+/* -- ATxmega -- */
+#if defined(__AVR_ATxmega64D3__) || defined(__AVR_ATxmega128D3__) || defined(__AVR_ATxmega192D3__) || defined(__AVR_ATxmega256D3__) || defined(__AVR_ATxmega384D3__)
+/* Could not find the previous definition so it is redefined here */
+#define XMEGA
+#define XMEGA_D3
+#include "RF24Network.h"
+#include "Sync.h"
 #else
-	// Framework headers
-	// Library headers
-	#include <RF24Network.h>
-	// Project headers
-	// This component's header
-	#include <Sync.h>
+/* -- All other devices -- */
+#include <RF24Network.h>
+#include <Sync.h>
 #endif
-/****************************************************************************/
 
-void Sync::update(void)
-{
-  // Pump the network
-  network.update();
+/* ------------------------------------------------------------------------------------------------------------------ */
 
-  // Look for changes to the data
-  uint8_t message[32];
-  uint8_t *mptr = message;
-  unsigned at = 0;
-  while ( at < len )
-  {
-    if ( app_data && internal_data && app_data[at] != internal_data[at] )
-    {
-      // Compose a message with the deltas
-      *mptr++ = at + 1;
-      *mptr++ = app_data[at];
+void Sync::update(void) {
+	/* Pump the network */
+	network.update();
 
-      // Update our internal view
-      internal_data[at] = app_data[at];
-    }
-    ++at;
-  }
-  // Zero out the remainder
-  while ( at++ < sizeof(message) )
-    *mptr++ = 0;
+	/* Look for changes to the data */
+	uint8_t message[32];
+	uint8_t *mptr = message;
+	unsigned at = 0;
+	while (at < len) {
+		if (app_data && internal_data && app_data[at] != internal_data[at]) {
+			/* Compose a message with the deltas */
+			*mptr++ = at + 1;
+			*mptr++ = app_data[at];
 
-  // If changes, send a message
-  if ( *message )
-  {
-    // TODO handle the case where this has to be broken into
-    // multiple messages
-    RF24NetworkHeader header(/*to node*/ to_node, /*type*/ 'S' /*Sync*/);
-    network.write(header,message,sizeof(message));
-  }
+			/* Update our internal view */
+			internal_data[at] = app_data[at];
+		}
+		++at;
+	}
 
-  // Look for messages from the network
-  // Is there anything ready for us?
-  if ( network.available() )
-  {
-    // If so, take a look at it
-    RF24NetworkHeader header;
-    network.peek(header);
+	/* Zero out the remainder */
+	while ((at++ < sizeof(message)) {
+		*mptr++ = 0;
+	}
 
-    switch (header.type)
-    {
-    case 'S':
+	/* If changes, send a message */
+	if (*message) {
+		/**
+		 * \todo Handle the case where this has to be broken into multiple messages
+		 */
+		RF24NetworkHeader header(to_node, 'S');	/* PARAMS: (<to_node>, <type>) -- Use type 'S' for 'Sync'. */
+		network.write(header, message, sizeof(message));
+	}
+
+	// Look for messages from the network
+	// Is there anything ready for us?
+	if (network.available()) {
+		// If so, take a look at it
+		RF24NetworkHeader header;
+		network.peek(header);
+
+		switch (header.type) {
+			case 'S':
       IF_SERIAL_DEBUG(printf_P(PSTR("%lu: SYN Received sync message\n\r"),millis()));
 
       network.read(header,&message,sizeof(message));

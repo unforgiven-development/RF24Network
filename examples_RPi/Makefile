@@ -11,24 +11,45 @@
 # use make all and make install to install the examples
 # You can change the install directory by editing the prefix line
 #
-prefix := /usr/local
 
-ARCH=armv6zk
+
+REL_RF24_MAKEFILE_INC="../../RF24/Makefile.inc"
+RF24_MAKEFILE_INC=$(shell echo "$$(cd "$$(dirname "$(REL_RF24_MAKEFILE_INC)")"; pwd)/$$(basename "$(REL_RF24_MAKEFILE_INC)")")
+
+ifneq ("$(wildcard $(RF24_MAKEFILE_INC))","")
+RF24_MAKEFILE_INC_EXISTS=1
+else
+RF24_MAKEFILE_INC_EXISTS=0
+endif
+
+ifeq ($(RF24_MAKEFILE_INC_EXISTS),1)
+# $(RF24_MAKEFILE_INC) DEFINES:
+# - CFLAGS
+# - PREFIX
+# - CC
+# - CXX
+# - LDCONFIG
+# - LIB_DIR
+# - EXAMPLES_DIR
+include $(RF24_MAKEFILE_INC)
+else
+PREFIX=/usr/local
+LIB_DIR=$(PREFIX)/lib
+EXAMPLES_DIR=$(PREFIX)/bin
+CC=gcc
+CXX=g++
+LDCONFIG=ldconfig
+# CFLAGS #
+## Assuming Raspberry Pi (original) / Raspberry Pi Zero ##
+CFLAGS=-march=armv6zk -mtune=arm1176jzf-s -mfpu=vfp -mfloat-abi=hard -O2 -pthread -pipe -fstack-protector --param=ssp-buffer-size=4 -std=c++0x
+## -- Check for Raspberry Pi 2+ -- ##
 ifeq "$(shell uname -m)" "armv7l"
-ARCH=armv7-a
+## Set CFLAGS for Raspberry Pi 2+ ##
+CFLAGS=-march=armv7-a -mtune=cortex-a7 -mfpu=neon-vfpv4 -mfloat-abi=hard -O2 -pthread -pipe -fstack-protector --param=ssp-buffer-size=4 -std=c++0x
 endif
 
-# Detect the Raspberry Pi from cpuinfo
-#Count the matches for BCM2708 or BCM2709 in cpuinfo
-RPI=$(shell cat /proc/cpuinfo | grep Hardware | grep -c BCM2708)
-ifneq "${RPI}" "1"
-RPI=$(shell cat /proc/cpuinfo | grep Hardware | grep -c BCM2709)
 endif
-
-ifeq "$(RPI)" "1"
-# The recommended compiler flags for the Raspberry Pi
-CCFLAGS=-Ofast -mfpu=vfp -mfloat-abi=hard -march=$(ARCH) -mtune=arm1176jzf-s -std=c++0x
-endif
+# (end of RF24_MAKEFILE_INC_EXISTS)
 
 
 # define all programs
@@ -38,16 +59,20 @@ SOURCES = ${PROGRAMS:=.cpp}
 all: ${PROGRAMS}
 
 ${PROGRAMS}: ${SOURCES}
-	g++ ${CCFLAGS} -Wall -I../ $@.cpp -lrf24-bcm -lrf24network -o $@
+	${CXX} ${CFLAGS} -Wall -I../ $@.cpp -lrf24-bcm -lrf24network -o $@
 
 clean:
 	rm -rf $(PROGRAMS)
 
-install: all
-	test -d $(prefix) || mkdir $(prefix)
-	test -d $(prefix)/bin || mkdir $(prefix)/bin
+install:
+	test -d $(PREFIX) || mkdir $(PREFIX)
+	test -d $(EXAMPLES_DIR) || mkdir $(EXAMPLES_DIR)
 	for prog in $(PROGRAMS); do \
-	  install -m 0755 $$prog $(prefix)/bin; \
+	  install -m 0755 $$prog $(EXAMPLES_DIR); \
 	done
+
+# simple debug function
+print-%:
+	@echo $*=$($*)
 
 .PHONY: install
